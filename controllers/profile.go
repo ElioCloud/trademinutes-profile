@@ -2,14 +2,15 @@ package controllers
 
 import (
 	"context"
-    "encoding/json"
+	"encoding/json"
+	"log"
 	"net/http"
 	"time"
-    "log"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"trademinutes-profile/config"
 	"trademinutes-profile/middleware"
+	"github.com/ElioCloud/shared-models/models"
 )
 
 func UpdateProfileInfoHandler(w http.ResponseWriter, r *http.Request) {
@@ -23,15 +24,7 @@ func UpdateProfileInfoHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Printf("Email from context: %s\n", email)
 
-	var req struct {
-		Program                 string   `json:"program"`
-		Location                string   `json:"location"`
-		Interests               []string `json:"interests"`
-		Languages               []string `json:"languages"`
-		JoinedDate              string   `json:"joinedDate"`
-		ExpectedGraduationDate  string   `json:"expectedGraduationDate"`
-	}
-
+	var req models.User
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		log.Printf("Error decoding request body: %v\n", err)
 		http.Error(w, "Invalid request", http.StatusBadRequest)
@@ -44,12 +37,12 @@ func UpdateProfileInfoHandler(w http.ResponseWriter, r *http.Request) {
 	defer cancel()
 
 	update := bson.M{
-		"program":               req.Program,
-		"location":              req.Location,
-		"interests":             req.Interests,
-		"languages":             req.Languages,
-		"joinedDate":            req.JoinedDate,
-		"expectedGraduationDate": req.ExpectedGraduationDate,
+		"program":              req.Program,
+		"location":             req.Location,
+		"interests":            req.Interests,
+		"languages":            req.Languages,
+		"joinedDate":           req.JoinedDate,
+		"expectedGraduationDate": req.ExpectedGradDate,
 	}
 	log.Printf("Update document: %+v\n", update)
 
