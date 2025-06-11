@@ -17,7 +17,7 @@ This is a user profile management API built with **Go** and **MongoDB**, using *
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/trademinutes-profile.git
+git clone https://github.com/ElioCloud/trademinutes-profile.git
 cd trademinutes-profile
 ```
 
@@ -29,7 +29,7 @@ go mod tidy
 
 Create a .env file in the root directory with:
 ```bash
-MONGO_URI=mongodb://localhost:27017
+MONGO_URI=your_mongodb_uri
 DB_NAME=your_database_name
 JWT_SECRET=your_jwt_secret_key
 PORT=8081
