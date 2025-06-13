@@ -3,7 +3,7 @@ module trademinutes-profile
 go 1.21
 
 require (
-	github.com/ElioCloud/shared-models v0.1.1
+	github.com/ElioCloud/shared-models v0.1.2
 	github.com/golang-jwt/jwt/v5 v5.2.2
 	github.com/gorilla/mux v1.8.1
 	github.com/joho/godotenv v1.5.1
