@@ -36,14 +36,42 @@ func UpdateProfileInfoHandler(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	update := bson.M{
-		"program":              req.Program,
-		"location":             req.Location,
-		"interests":            req.Interests,
-		"languages":            req.Languages,
-		"joinedDate":           req.JoinedDate,
-		"expectedGraduationDate": req.ExpectedGradDate,
+	update := bson.M{}
+
+	// Update only non-zero values (if they are provided)
+	if req.Program != "" {
+		update["program"] = req.Program
 	}
+	if req.Location != "" {
+		update["location"] = req.Location
+	}
+	if req.College != "" {
+		update["college"] = req.College
+	}
+	if req.YearOfStudy != "" {
+		update["yearOfStudy"] = req.YearOfStudy
+	}
+	if req.Bio != "" {
+		update["bio"] = req.Bio
+	}
+	if len(req.Skills) > 0 {
+		update["skills"] = req.Skills
+	}
+	if req.ProfilePictureURL != "" {
+		update["profilePictureURL"] = req.ProfilePictureURL
+	}
+	if (req.Stats != models.ProfileStats{}) {
+		update["stats"] = req.Stats
+	}
+	if len(req.Achievements) > 0 {
+		update["achievements"] = req.Achievements
+	}
+
+	if len(update) == 0 {
+		http.Error(w, "No valid fields to update", http.StatusBadRequest)
+		return
+	}
+
 	log.Printf("Update document: %+v\n", update)
 
 	result, err := collection.UpdateOne(ctx, bson.M{"email": email}, bson.M{"$set": update})
@@ -56,3 +84,4 @@ func UpdateProfileInfoHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Write([]byte("Profile information updated successfully"))
 }
+
